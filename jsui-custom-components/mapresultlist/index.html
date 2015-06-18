@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Coveo Customers</title>
+  <meta about="Search all content at once."/>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0,  maximum-scale=1.0, user-scalable=0">
+  <script src="js/CoveoJsSearch.WithDependencies.js"></script>
+  <script src="js/MapResultList.js"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVj03eslCNasiS2WwVkSrfAIgUoDRQQTA"></script>
+  <link rel="stylesheet" href="css/CoveoFullSearch.css"/>
+
+  <style type="text/css">
+    .CoveoMapResultList {
+      height: 300px;
+      width: 100%;
+    }
+  </style>
+  <script type="text/javascript">
+    $(function () {
+      Coveo.Rest.SearchEndpoint.endpoints['default'] = new Coveo.Rest.SearchEndpoint({
+        restUri: 'https://cloudplatform.coveo.com/rest/search',
+        accessToken: 'c37f96f3-e0e4-4370-bc95-f33e080ee89d', // token for an anonymous dummy user
+        queryStringArguments: {
+          workgroup: 'Coveo'
+        }
+      });
+
+      var getQueryResultAddress = function (queryResult) {
+        var address = "";
+        var street = queryResult.raw.sfstreet;
+        var city = queryResult.raw.sfcity;
+
+        if (street && city) {
+          address += street + ', ' + city;
+
+          var state = queryResult.raw.sfstate;
+          if (state) {
+            address += ', ' + state;
+          }
+          var postalCode = queryResult.raw.sfpostalcode;
+          if (postalCode) {
+            address += ', ' + postalCode;
+          }
+          var country = queryResult.raw.sfcountry;
+          if (country) {
+            address += ', ' + country;
+          }
+        }
+
+        return address;
+      };
+
+      $('#search').coveo('init', {
+        'googleMap': {
+          computeQueryResultAddress: getQueryResultAddress
+        }
+      });
+    });
+  </script>
+</head>
+
+<body id="search"
+      class="CoveoSearchInterface"
+      data-enable-history="true"
+      data-hidden-expression="@objecttype==account"
+      data-results-per-page="10">
+  <div class="coveo-tab-section">
+    <a class="CoveoTab"
+       data-id="All"
+       data-caption="Customers"
+       data-icon="coveo-sprites-tab-all-content"></a>
+  </div>
+
+  <div class="coveo-search-section">
+    <div class="coveo-logo-column">
+      <div class="coveo-logo"></div>
+    </div>
+    <div class="coveo-searchBox-column">
+      <div class="coveo-search-section-wrapper">
+        <div class="CoveoSettings" data-include-in-menu=".CoveoShareQuery,.CoveoPreferencesPanel"></div>
+        <div class="CoveoSearchBox" data-activate-omnibox="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="coveo-results-section">
+    <div class="coveo-facet-column">
+      <div data-tab="All">
+        <div class="CoveoFacet"
+             data-title="Customer License Record"
+             data-field="@sfrecordtypename"></div>
+
+        <div class="CoveoFacet"
+             data-title="Country"
+             data-field="@sfcountry"></div>
+
+        <div class="CoveoFacet"
+             data-title="State"
+             data-field="@sfstate"></div>
+
+        <div class="CoveoFacet"
+             data-title="City"
+             data-field="@sfcity"></div>
+      </div>
+    </div>
+
+    <div class="coveo-results-column">
+      <div class="CoveoShareQuery"></div>
+      <div class="CoveoPreferencesPanel">
+        <div class="CoveoResultsPreferences"></div>
+        <div class="CoveoResultsFiltersPreferences"></div>
+      </div>
+      <div class="CoveoBreadcrumb"></div>
+
+      <div class="coveo-results-header">
+        <div class="coveo-summary-section">
+          <span class="CoveoQuerySummary"></span>
+          <span class="CoveoQueryDuration"></span>
+        </div>
+        <div class="coveo-sort-section">
+          <span class="CoveoSort" data-sort-criteria="relevancy">Relevance</span>
+          <span class="CoveoSort" data-sort-criteria="date descending,date ascending">Date</span>
+        </div>
+        <div class="coveo-clear"></div>
+      </div>
+
+      <div class="CoveoHiddenQuery"></div>
+      <div class="CoveoDidYouMean"></div>
+      <div class="CoveoErrorReport" data-pop-up="false"></div>
+
+      <div class="CoveoMapResultList" id="googleMap" data-wait-animation="fade">
+      </div>
+
+      <div class="CoveoResultList" data-wait-animation="fade">
+        <script class="result-template" type="text/x-underscore-template">
+          <%= fromFileTypeToIcon(obj) %>
+
+          <div class="coveo-title">
+            <a class="CoveoResultLink"><%=title?highlight(title, titleHighlights):clickUri%></a>
+          </div>
+
+          <div class="CoveoFieldValue" data-field="@sfstreet"></div>
+          <div>
+            <span class="CoveoFieldValue" data-field="@sfcity"></span>,
+            <span class="CoveoFieldValue" data-field="@sfstate"></span>
+            <span class="CoveoFieldValue" data-field="@sfpostalcode"></span>,
+            <span class="CoveoFieldValue" data-field="@sfcountry"></span>
+          </div>
+        </script>
+      </div>
+
+      <div class="CoveoPager"></div>
+    </div>
+  </div>
+</body>
+</html>

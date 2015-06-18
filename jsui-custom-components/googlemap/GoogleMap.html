@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>All Content</title>
+    <meta about="Search all content at once."/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCm-i7I611b3HxtQOCt3NlMtl5-oFX9Oc&sensor=false"> </script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <meta name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0,  maximum-scale=1.0, user-scalable=0">
+    <script src="js/CoveoJsSearch.WithDependencies.js"></script>
+    <script src="js/CoveoResultRelatedResults.js"></script>
+    <script src="js/d3.js"></script>
+	<script src="js/CoveoGoogleMap.js"></script>
+    <script src="js/CoveoMarkerClusterer.js"></script>
+ 	<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
+
+    
+    <link rel="stylesheet" href="css/CoveoFullSearch.css"/>
+<style>
+.BigLeft{
+display:inline-block;
+background-color: #fcfdfd;
+width:65%;
+padding:5px;
+margin-right:10px;
+border-right:2px solid #c0c0c0;
+border-bottom:2px solid #c0c0c0;
+vertical-align: top;
+}
+.BigRight{
+display:inline-block;
+background-color: ##f2f4f5;
+padding:5px;
+width:25%;
+border-right:2px solid #c0c0c0;
+border-bottom:2px solid #c0c0c0;
+vertical-align: top;
+}
+.BigRight:after{   
+    display: block;    
+    height: 0px;    
+	visibility: hidden; 
+    clear: both;    
+} 
+
+.CoveoResult .Big{
+display: block;
+background-color: yellow;
+font-size: 32px;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+}
+.Big .coveo-title{
+display: block;
+font-size: 32px;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+}
+</style>
+    <script type="text/javascript">
+	
+      $(function () {
+	    //Used for the related results on a result
+	    
+	    Coveo.Rest.SearchEndpoint.configureOnPremiseEndpoint('http://localhost:8080/rest/search');
+
+        //Make sure that we add the filters to the breadcrumb		
+		 $('#search').on('populateBreadcrumb', function(e, args){
+                if (mapQuery!=null)
+				{
+				   if(mapQuery!="@uri")
+				   {
+                    var container = "<div>Filtered on map location.</div>";
+                    args.breadcrumbs.push({ element: container });
+					}
+                }
+				if (mapQueryCircle!=null)
+				{
+				   if(mapQueryCircle!="@uri")
+				   {
+                    var container = "<div>Filtered on only contents within the boundary of the circle location.</div>";
+                    args.breadcrumbs.push({ element: container });
+					}
+                }
+		});
+		
+		//Hook up to clearBreadcrumb
+		$('#search').on('clearBreadcrumb', function(e, args){
+                mapQuery=null;
+				mapQueryCircle=null;
+				resetMap();
+				$('#search').coveo('executeQuery');
+		});
+		
+		//Init the search page
+        $('#search').coveo('init');
+		
+		//On query sucess we need to recompose the map
+		$('#search').on('querySuccess', function (e, args) {
+			mapQueryResults = args.queryBuilder.computeCompleteExpression();
+			if (Coveo.Utils.isNullOrUndefined(mapQueryResults))
+			{
+				mapQueryResults='@uri';
+			}
+			allreset=false;
+			createResultsMap(mapQueryResults, "mylat","mylon");
+		});
+		
+		//When we build the query we might need to add the mapquery + circle query to the current query
+		$('#search').on("buildingQuery", function (e, args) {
+					if (mapQuery!=null)
+					{
+					   args.queryBuilder.advancedExpression.add(mapQuery);
+					}
+					if (mapQueryCircle!=null)
+					{
+					   args.queryBuilder.advancedExpression.add(mapQueryCircle);
+					}
+		});
+		
+    });
+    </script>
+  </head>
+
+  <body id="search" class='CoveoSearchInterface' data-enable-history="true" data-hidden-expression="@mylat<>0">
+
+    <div class="coveo-tab-section">
+      <a class="CoveoTab"
+         data-id="All"
+         data-caption="All Content"
+         data-icon="coveo-sprites-tab-all-content"></a>
+      <a class="CoveoTab"
+         data-id="All2"
+         data-caption="All Content2"
+         data-icon="coveo-sprites-tab-all-content"></a>
+    </div>
+    <div class="coveo-search-section">
+      <div class="coveo-logo-column">
+        <div class="coveo-logo"></div>
+      </div>
+      <div class="coveo-searchBox-column">
+        <div class="coveo-search-section-wrapper">
+          <div class="CoveoSettings" data-include-in-menu=".CoveoShareQuery,.CoveoPreferencesPanel"></div>
+          <div class="CoveoSearchBox" data-activate-omnibox="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coveo-results-section">
+      <div class="coveo-facet-column">
+        <div data-tab="All">
+
+          <div class="CoveoFacetRange" data-tab="All" data-title="Relative date distribution" data-field="@sysdate"
+               data-date-field="true" data-range-slider="true" data-slider-graph-steps="20"
+               data-slider-start="2007/12/31"
+               data-slider-end="2014/12/31"></div>
+
+          <div class="CoveoFacet"
+               data-title="Type"
+               data-field="@objecttype"
+               data-allow-toggling-operator="true"
+               data-show-icon="true"
+               data-tab="All"></div>
+
+          <div class="CoveoFacet"
+               data-title="File Type"
+               data-field="@sysfiletype"></div>
+
+          <div class="CoveoFacet"
+               data-title="Author"
+               data-field="@sysauthor"></div>
+        </div>
+      </div>
+
+      <div class="coveo-results-column">
+        <div class="CoveoShareQuery"></div>
+        <div class="CoveoPreferencesPanel">
+          <div class="CoveoResultsPreferences"></div>
+          <div class="CoveoResultsFiltersPreferences"></div>
+        </div>
+        <div class="CoveoBreadcrumb"></div>
+
+        <div class="coveo-results-header">
+          <div class="coveo-summary-section">
+            <span class="CoveoQuerySummary"></span>
+            <span class="CoveoQueryDuration"></span>
+          </div>
+          <div class="coveo-sort-section">
+            <span class="CoveoSort" data-sort-criteria="relevancy">Relevance</span>
+            <span class="CoveoSort" data-sort-criteria="date descending,date ascending">Date</span>
+          </div>
+          <div class="coveo-clear"></div>
+        </div>
+
+        <div class="CoveoHiddenQuery"></div>
+        <div class="CoveoDidYouMean"></div>
+        <div class="CoveoErrorReport" data-pop-up="false"></div>
+		<div id="map-container" >
+			<div style="width:700px;height:300px" id="map-canvas"></div>
+		</div>
+
+        <div class="CoveoResultList" data-wait-animation="fade">
+          <script id="Default" type="text/x-underscore-template">
+            <%= fromFileTypeToIcon(obj) %>
+
+            <div class="coveo-date"><%-dateTime(raw.sysdate)%></div>
+
+            <div class="coveo-title">
+              <a class="CoveoResultLink" ><%=title?highlight(title, titleHighlights):clickUri%></a>
+
+              <%= loadTemplate("DefaultQuickView") %>
+            </div>
+
+			<div style="margin:5px" width="100px"><%= thumbnail(undefined,undefined,{'width':'100px'})%></div>
+            <div class="coveo-excerpt">
+              <%=highlight(excerpt, excerptHighlights)%>
+            </div>
+
+            <div class="CoveoPrintableUri"></div>
+
+            <table class="CoveoFieldTable">
+              <tr data-field="@sysauthor" data-caption="Author"></tr>
+            </table>
+			<div class="CoveoResultsRelated"
+               data-result-template-id="RelatedResultsTemplate"
+               data-normal-caption="Show Related Files"
+			   data-title-caption="Related Files based upon the same author"
+               data-expanded-caption="Do not show Related Files"
+               data-no-results-caption="No related files found"
+			   data-query="@sysauthor=[FIELD1]"
+			   data-fields="sysauthor" 
+			   data-number-Of-Results=5 ></div>
+			   <div ID="Rel2" class="CoveoResultsRelated" 
+               data-result-template-id="RelatedResultsTemplate"
+               data-normal-caption="Show Related Powerpoints"
+			   data-title-caption="Related Files based upon the same author, but only powerpoints"
+               data-expanded-caption="Do not show Related Powerpoints"
+               data-no-results-caption="No related powerpoint files found"
+			   data-query="@sysauthor=[FIELD1] @sysfiletype=ppt"
+			   data-fields="sysauthor" 
+			   data-number-Of-Results=2 
+			   data-indent=160></div>
+          </script>
+		 <script id="DefaultBigLeft"  type="text/x-underscore-template">
+		  <div class="BigLeft">
+            <%= fromFileTypeToIcon(obj) %>
+
+            <div class="coveo-date"><%-dateTime(raw.sysdate)%></div>
+
+            <div class="coveo-title">
+              <a class="CoveoResultLink" ><%=title?highlight(title, titleHighlights):clickUri%></a>
+
+              <%= loadTemplate("DefaultQuickView") %>
+            </div>
+            <div style="float:left;margin:5px" width="100px">
+			<%= thumbnail(undefined,undefined,{'width':'100px'})%>
+			</div>
+            <div class="coveo-excerpt">
+              <%=highlight(excerpt, excerptHighlights)%>
+			   <%= highlight(firstSentences, firstSentencesHighlights)%>
+            </div>
+
+            <div class="CoveoPrintableUri"></div>
+
+            <table class="CoveoFieldTable">
+              <tr data-field="@sysauthor" data-caption="Author"></tr>
+            </table>
+			</div>
+          </script>
+		 <script id="DefaultBigRight"  type="text/x-underscore-template">
+		  <div class="BigRight">
+            <%= fromFileTypeToIcon(obj) %>
+
+            <div class="coveo-date"><%-dateTime(raw.sysdate)%></div>
+
+            <div class="coveo-title">
+              <a class="CoveoResultLink" ><%=title?highlight(title, titleHighlights):clickUri%></a>
+
+              <%= loadTemplate("DefaultQuickView") %>
+            </div>
+			<div style="float:right;margin:5px" width="100px"><%= thumbnail(undefined,undefined,{'width':'100px'})%></div>
+            <div class="coveo-excerpt">
+              <%=highlight(excerpt, excerptHighlights)%>
+            </div>
+
+            <div class="CoveoPrintableUri"></div>
+
+            <table class="CoveoFieldTable">
+              <tr data-field="@sysauthor" data-caption="Author"></tr>
+            </table>
+			</div>
+          </script>
+          <script id="DefaultQuickView" type="text/x-underscore-template">
+            <div class="CoveoQuickView" data-title="<%= attrEncode(fromFileTypeToIcon(obj) + title) %>"
+                 data-fixed="true"
+                 data-template-id="DefaultQuickViewContent">
+            </div>
+          </script>
+
+          <script id="DefaultQuickViewContent" type="text/x-underscore-template">
+            <div class="coveo-quick-view-header">
+              <table class="CoveoFieldTable">
+                <tr data-field="@sysdate" data-caption="Date" data-helper="dateTime"></tr>
+                <tr data-field="@objecttype" data-caption="Type"></tr>
+              </table>
+            </div>
+            <div class="CoveoQuickViewDocument"></div>
+          </script>
+
+          <script class="result-template" type="text/x-underscore-template">
+            <%=
+            loadTemplates({
+			'DefaultBigLeft' : index==0,
+			'DefaultBigRight' : index==1,
+            'Default' : index>1
+			
+            })
+            %>
+			
+          </script>
+		  	 <script id="RelatedResultsTemplate" type="text/x-underscore-template">
+      <div> <div class="coveo-attachment-container" style="margin-left:20px;">
+          <%= fromFileTypeToIcon() %>
+          <a class="CoveoResultLink"><%= title || clickUri %></a>
+          <% if(Coveo.QueryUtils.hasThumbnail(obj)){ %> <span class="coveo-thumbnail-icon"><%= thumbnail(undefined,undefined,{'width':'100px'}) %></span><% }
+          %>
+          <%= loadTemplate("DefaultQuickView") %>
+        </div></div>
+    </script>
+
+        </div>
+			  
+        <div class="CoveoPager"></div>
+      </div>
+    </div>
+	
+  </body>
+
+</html>
