@@ -9,7 +9,6 @@
        88 `"YbbdP"'  `"YbbdP'Y8 88  
       ,88
     888P"    - Custom components
-<<<<<<< HEAD
 ```
 
 Custom components made for [Coveo jsui framework](https://developers.coveo.com/display/JsSearch/Home),
