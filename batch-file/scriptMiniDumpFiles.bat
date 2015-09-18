@@ -13,6 +13,6 @@ CALL taskkill /f /im CESConverter7.exe
 
 
 
-CALL msg * "CESService7 has been stopped because it was taking too much memory, please contact Coveo. More informations :  "https://developers.coveo.com/display/SupportKB/TroubleShooting+memory+issues+with+CESService7""
+CALL msg * "CESService7 has been stopped because it was taking too much memory, please contact Coveo. More informations : "https://developers.coveo.com/display/SupportKB/TroubleShooting+memory+issues+with+CESService7""
 
 
