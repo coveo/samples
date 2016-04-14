@@ -178,44 +178,7 @@ namespace Coveo.For.Sitecore.Samples.Processors
         /// <returns>The cleaned HTML content.</returns>
         private string CleanHtmlContent(string p_HtmlContent)
         {
-            Regex startCommentRegex = new Regex(@"<!--\s*" + StartCommentText + @"\s*-->");
-            Regex endCommentRegex = new Regex(@"<!--\s*" + EndCommentText + @"\s*-->");
-
-            Match startCommentMatch = startCommentRegex.Match(p_HtmlContent);
-
-            while (startCommentMatch.Success) {
-                int endOfStartCommentIndex = startCommentMatch.Index + startCommentMatch.Length;
-                Match endCommentMatch = endCommentRegex.Match(p_HtmlContent, endOfStartCommentIndex);
-
-                if (endCommentMatch.Success) {
-                    p_HtmlContent = RemoveContentBetweenMatches(p_HtmlContent, startCommentMatch, endCommentMatch);
-
-                    startCommentMatch = startCommentRegex.Match(p_HtmlContent);
-                } else {
-                    break;
-                }
-            }
-
-            return p_HtmlContent;
-        }
-
-        /// <summary>
-        /// Removes successfully matched start and end comments and the content in between.
-        /// </summary>
-        /// <param name="p_HtmlContent">The HTML content in which to remove the content.</param>
-        /// <param name="p_StartCommentMatch">The start comment successful match.</param>
-        /// <param name="p_EndCommentMatch">The end comment successful match.</param>
-        /// <returns>The HTML content without the matched comments and content in between.</returns>
-        private string RemoveContentBetweenMatches(string p_HtmlContent,
-                                                   Match p_StartCommentMatch,
-                                                   Match p_EndCommentMatch)
-        {
-            int firstPartLength = p_StartCommentMatch.Index;
-            int secondPartStartIndex = p_EndCommentMatch.Index + p_EndCommentMatch.Length;
-            int secondPartLength = p_HtmlContent.Length - secondPartStartIndex;
-
-            return p_HtmlContent.Substring(0, firstPartLength) +
-                   p_HtmlContent.Substring(secondPartStartIndex, secondPartLength);
+            return Regex.Replace(p_HtmlContent, @"<!--\s*" + StartCommentText + @"\s*-->.*?<!--\s*" + EndCommentText + @"\s*-->", "", RegexOptions.Singleline);
         }
     }
 }
