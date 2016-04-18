@@ -63,6 +63,15 @@ using Coveo.SearchProvider.Pipelines;
 //        <!-- END NOINDEX -->
 //      </body>
 //
+//      Be cautious with the comment locations. There are 2 possible problems:
+//        1. Removing a different number of start tags than end tags.
+//           This will make your HTML invalid and cause a lot of rendering
+//           problems.
+//        2. Nested comments. Avoid them as the code don't support them.
+//           The content between the first start comment and the first end
+//           comment will be removed, leaving everything between the two end
+//           comments.
+//
 //   3. Rebuild your Sitecore indexes managed by Coveo for Sitecore to
 //      index the cleaned HTML content.
 
