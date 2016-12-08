@@ -1,4 +1,4 @@
-//Replace the script bloc containing ".coveoForSitecore('init', CoveoForSitecore.componentsOptions);" with this.
+//Replace the script block containing ".coveoForSitecore('init', CoveoForSitecore.componentsOptions);" with this.
 
 <script type="text/javascript">
     //Implement this function based on your security rules
