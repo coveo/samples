@@ -14,7 +14,7 @@ using Coveo.SearchProvider.Pipelines;
 using Sitecore.ContentSearch;
 using Sitecore.Data;
 
-namespace ItemLimitedAccess.Processors
+namespace Coveo.For.Sitecore.Samples.Processors
 {
     /// <summary>
     /// <c>coveoPostItemProcessingPipeline</c> processor that creates a stripped down public copy of a marked item.
