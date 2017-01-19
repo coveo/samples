@@ -1,9 +1,11 @@
 headers:
-  apiKey: "Bearer <access token>"
-  organisation: "<organisation name>"
-  sourceName: "<source name>"
-  url: "<node containing the url>"
+  apiKey: "Bearer <Replace with Api key>"
+  organisation: "<Replace with org name>"
+  sourceName: "<Replace with org source>"
+  url: "<replace with>" #The node name of a single document URL inside the json document array (default : "url")
 
 basicInformation:
-  array: "<array containing the documents>"
-  filePath: "<file path>"
+  array: "<replace with node name>" #the main node of the json file (default : "documents")
+  filePath: "<replace with json filename>" #the main json file containing all the documents nodes (default : "docs.json")
+  folder: "<path of the folder to crawl>" #folder to crawl to populate the main json document
+  filetype: "<replace by file type>" #type of file to parse (default : "txt" or leave empty if you don't want to crawl a folder)

@@ -1,11 +1,15 @@
 import json
 import Pusher
+import urllib.request
+
 class Parser():
     def __inti__(self):
         self
 
+# Read documents.json
     def readDocument(config):
         filePath = config['basicInformation']['filePath']
+        print('Reading JSON file')
         with open(filePath) as data_file:
             data = json.load(data_file)
             arrayKey = config['basicInformation']['array']
@@ -16,13 +20,13 @@ class Parser():
             documentArray = data[arrayKey]
             Parser.parseArray(documentArray, organisation, apiKey, sourceName, urlValue)
 
+# Push array in source
     def parseArray(array, organisation, apiKey, sourceName, urlValue):
+        StaReb = 'REBUILD'
+        StaIdl = 'IDLE'
         pusher = Pusher.Pusher
-        pusher.toggleStatus('REBUILD', organisation, apiKey, sourceName)
+        pusher.toggleStatus(StaReb, organisation, apiKey, sourceName)
         for item in array:
-            url = item[urlValue]
-            pusher.pushDocument(item, url, organisation, apiKey, sourceName)
-        pusher.toggleStatus('IDLE', organisation, apiKey, sourceName)
-
-
-
+            itmUrl = item[urlValue]
+            pusher.pushDocument(item, itmUrl, organisation, apiKey, sourceName)
+        pusher.toggleStatus(StaIdl, organisation, apiKey, sourceName)
