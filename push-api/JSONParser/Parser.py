@@ -1,10 +1,9 @@
 import json
 import Pusher
+import SourceStatus
 import urllib.request
 
 class Parser():
-    def __inti__(self):
-        self
 
 # Read documents.json
     def readDocument(config):
@@ -22,11 +21,11 @@ class Parser():
 
 # Push array in source
     def parseArray(array, organisation, apiKey, sourceName, urlValue):
-        StaReb = 'REBUILD'
-        StaIdl = 'IDLE'
+        StaReb = SourceStatus.REBUILD
+        StaIdl = SourceStatus.IDLE
         pusher = Pusher.Pusher
         pusher.toggleStatus(StaReb, organisation, apiKey, sourceName)
         for item in array:
-            itmUrl = item[urlValue]
-            pusher.pushDocument(item, itmUrl, organisation, apiKey, sourceName)
+            itemUrl = item[urlValue]
+            pusher.pushDocument(item, itemUrl, organisation, apiKey, sourceName)
         pusher.toggleStatus(StaIdl, organisation, apiKey, sourceName)

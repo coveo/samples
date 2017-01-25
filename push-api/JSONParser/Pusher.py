@@ -4,8 +4,6 @@ import urllib
 import http.client
 
 class Pusher():
-    def __init__(self):
-        self
 
     # Change the source status
     def toggleStatus(status, organisation, apiKey, sourceName):
@@ -15,7 +13,7 @@ class Pusher():
         h = http.client.HTTPSConnection('push.cloud.coveo.com')
         h.request('POST', '/v1/organizations/' + organisation + '/sources/' + sourceName + '/status?statusType=' + status, params, headers)
         response = h.getresponse()
-        print(response.status, response.reason, 'Source status change :', status)
+        print(response.status, response.reason, 'Source status change:', status)
         h.close();
 
     # Push a single element in the source
@@ -25,5 +23,5 @@ class Pusher():
         h = http.client.HTTPSConnection('push.cloud.coveo.com')
         h.request('PUT', '/v1/organizations/' + organisation + '/sources/' + sourceName + '/documents?documentId=' + url, params, headers)
         response = h.getresponse()
-        print(response.status, response.reason, 'Document :', url)
+        print(response.status, response.reason, 'Document:', url)
         h.close();

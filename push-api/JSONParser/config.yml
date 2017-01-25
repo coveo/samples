@@ -1,11 +1,11 @@
 headers:
-  apiKey: "Bearer <Replace with Api key>"
-  organisation: "<Replace with org name>"
-  sourceName: "<Replace with org source>"
-  url: "<replace with>" #The node name of a single document URL inside the json document array (default : "url")
+  apiKey: "Bearer xx1fca5632-9a8e-4960-bb3f-8cba30ada5bf"
+  organisation: "coveointernaltesting1"
+  sourceName: "coveointernaltesting1-szxu5hfuqu3vnpt7yqg5sgccom"
+  url: "url" #The node name of a single document URL inside the json document array (default : "url")
 
 basicInformation:
-  array: "<replace with node name>" #the main node of the json file (default : "documents")
-  filePath: "<replace with json filename>" #the main json file containing all the documents nodes (default : "docs.json")
-  folder: "<path of the folder to crawl>" #folder to crawl to populate the main json document
-  filetype: "<replace by file type>" #type of file to parse (default : "txt" or leave empty if you don't want to crawl a folder)
+  array: "documents" #the main node of the json file (default : "documents")
+  filePath: "docs.json" #the main json file containing all the documents nodes (default : "docs.json")
+  folder: "/Users/vbernard/Documents/0Data/small/" #folder to crawl to populate the main json document
+  filetype: "txt" #type of file to parse (default : "txt" or leave empty if you don't want to crawl a folder)

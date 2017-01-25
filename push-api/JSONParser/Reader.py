@@ -2,8 +2,6 @@ import json
 import os
 
 class Reader():
-    def __init__(self):
-        self
 
 # Parse every file and create a JSON
     def readFolder(config):
@@ -11,7 +9,6 @@ class Reader():
         filetype = config['basicInformation']['filetype']
 
         if filetype:
-
             docs = []
             result = {}
 

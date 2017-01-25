@@ -1,8 +1,6 @@
 import yaml
 
 class yamlParser(object):
-    def __inti__(self):
-        self.configFilePath = 'config.yml'
 
 # Read config documents
     def readConfig():
