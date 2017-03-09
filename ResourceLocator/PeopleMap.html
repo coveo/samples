@@ -15,8 +15,8 @@
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
 	<link rel="stylesheet" href="/lib/calendar/fullcalendar.min.css">
-    <script src="lib/calendar/moment.min.js"></script>
-    <script src="lib/calendar/fullcalendar.min.js"></script>
+    	<script src="lib/calendar/moment.min.js"></script>
+    	<script src="lib/calendar/fullcalendar.min.js"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>
 
 <!-- End Needed libs for Calendar/JQuery datepicker -->
@@ -160,10 +160,10 @@
             fieldcontent=fieldcontent.replace(/;/g,'","');
             newquery=newquery.replace("[FIELD"+(i+1)+"]",fieldcontent);
           }
-		  if (this.result.state!=undefined)
-		  {
-			newquery=newquery.replace('[QUERY]',this.result.state["q"]);
-		  }
+	  if (this.result.state!=undefined)
+	  {
+		newquery=newquery.replace('[QUERY]',this.result.state["q"]);
+	  }
           queryBuilder.advancedExpression.add(newquery);
           this.queryController.getEndpoint().search(queryBuilder.build()).done(function(data) {
             _this.showingMoreResults = true;
@@ -179,10 +179,6 @@
         };
         ResultsRelated.prototype.buildHeader = function () {
           var header = Coveo.$('<div/>').addClass('coveo-folding-header').appendTo(this.element);
-          if (this.options.normalCaption != undefined && this.options.expandedCaption != undefined) {
-            //                    this.normalCaption = Coveo.$('<div/>').addClass('coveo-folding-header-caption').text(this.options.normalCaption).appendTo(header);
-            //                  this.expandedCaption = Coveo.$('<div/>').addClass('coveo-folding-header-caption').text(this.options.expandedCaption).appendTo(header);
-          }
         };
         ResultsRelated.prototype.buildResults = function () {
           this.results = Coveo.$('<div/>').addClass('coveo-folding-results').appendTo(this.element);
@@ -247,7 +243,6 @@
         ResultsRelated.prototype.renderChildResult = function (childResult) {
           Coveo.QueryUtils.setStateObjectOnQueryResult(this.queryStateModel.get(), childResult);
           var oneChild = Coveo.$(this.options.resultTemplate.instantiateToElement(childResult))
-          //.addClass('coveo-result-folding-child-result')
           .appendTo(this.results);
           oneChild.toggleClass('coveo-normal-child-result', !this.showingMoreResults);
           oneChild.toggleClass('coveo-expanded-child-result', this.showingMoreResults);
@@ -420,11 +415,11 @@ $(function () {
 						var curdate = moment(date).format('YYYYMMDD');
 						if (args.result.raw[FieldnameAvailClean] != undefined) {
 							if (args.result.raw[FieldnameAvailClean].indexOf(curdate) != -1) {
-								//disable it
+								//Available CSS
 								cell.addClass("calAvail");
 								cell.attr('title', 'Available');
 							} else {
-								//disable it
+								//Not Available CSS
 								cell.addClass("calNotAvail");
 								cell.attr('title', 'Not Available');
 							}
@@ -436,7 +431,7 @@ $(function () {
 			}
 		}
 	});
-	//Coveo.$('#search').coveo('init');
+	
 });
   </script>
   <div class="CoveoAnalytics">
