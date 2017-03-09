@@ -19,27 +19,13 @@ def mylog(message):
     #Log using the normal logging
     document.log(message)
     myerr+=';'+message
-    #Log using a field
+    #Log using a field ONLY FOR DEBUGGING PURPOSES!!!
     document.add_meta_data({"myerr":myerr})
-    
-    
-#checks if URL exists
-def check(myurl):
-    try:
-        res=requests.get(myurl)
-        if (res.status_code==200):
-            return True
-        else:
-            return False
-        return res.status_code
-    except Exception,e:
-        return False
 
 # Create error logging entry
 mylog('Start')
 
 # Get current metadata for geolocation
-# TEST 3, this field is mapped from the ziplocation to myzip in the fieldmappings
 city=document.get_meta_data_value('myzip')
 mylog("Zip:"+' '.join(city))
 
@@ -83,7 +69,6 @@ if (city):
 #----------------------------------------------------------
 
 if (city):
-    #Field to store the availability in
     mylog("Start avail")
     alldatesfield="mydateavail"
     alldates=""
@@ -92,52 +77,29 @@ if (city):
 
     dateBegin=Date+datetime.timedelta(days=-50)
     dateEnd=Date+datetime.timedelta(days=3*365)
-    dateBeginP=Date+datetime.timedelta(days=10+currenthours)
-    dateEndP=Date+datetime.timedelta(days=10+currenthours+15)
-    dateBeginP2=Date+datetime.timedelta(days=60+currenthours)
-    dateEndP2=Date+datetime.timedelta(days=90+currenthours)
     currenthours=random.randint(1,6)
-    #print dateBegin
-    #print dateEnd
-    #Put all dates by day into a string
-    tot=(dateEnd-dateBegin).days
+    numberOfDays=(dateEnd-dateBegin).days
     
-    #print 'Total nr of days:'+str(tot)
-    for i in range( 0,tot):
+    for i in range( 0,numberOfDays):
         thisdate2=dateBegin+datetime.timedelta(days=i)
-        #currenthours=random.randint(0,8)
         hours=0
         if (thisdate2.month % currenthours)==0:
             hours=8
         
-        #if ((thisdate2-dateBeginP).days>0 and (thisdate2-dateEndP).days<0):
-         #   hours=8
-        #if ((thisdate2-dateBeginP2).days>0 and (thisdate2-dateEndP2).days<0):
-        #    hours=8
         if (hours>3):
             alldates=alldates+";"+str(thisdate2.year)+str(thisdate2.month).zfill(2)+str(thisdate2.day).zfill(2)
 
-    #Put field in the inde        
     mylog("End Avail")
     document.add_meta_data({alldatesfield:alldates})
     
 try:
-    #Add the image since this could lead to timeouts...
     imagenr=int(document.get_meta_data_value('myrownr')[0])
     togetnr=imagenr % 1555
     #Get the thumbnail
     thumbnail = document.DataStream('$thumbnail$')
     mylog("Nr to get:"+str(togetnr)+" user:"+str(imagenr))
     myurl="http://www.myimage.com/images/me/"+str(togetnr)+".jpg"
-    checkimg=check(myurl)   
-    if (not checkimg):
-        myurl="http://www.myimage.com/images/me/0.jpg"
     l = requests.get(myurl,timeout=4)
-    #First authenticate - NO NEED HERE
-    #be-aware of the timeout!
-    #l = requests.get("http://graph.facebook.com/v2.8/"+str(togetnr)+"/picture",timeout=4)
-    #Get the image
-    #d = requests.get(imageurl[0],cookies=l.cookies)
     if "error" in l.content:
         mylog("No Image")
     else:
