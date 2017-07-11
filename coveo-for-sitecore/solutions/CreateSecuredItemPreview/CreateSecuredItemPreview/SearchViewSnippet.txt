@@ -1,15 +1,15 @@
-﻿//Replace the script block containing ".coveoForSitecore('init', CoveoForSitecore.componentsOptions);" with this.
+﻿//Replace the script block containing ".coveoForSitecore('init', CoveoForSitecore.componentsOptions);" with the following:
 
 <script type="text/javascript">
-    //Implement this function based on your security rules
+    //Modify this function based on your security rules
     function userHasAccessToSecuredContent() {
-        return @Model.IsUserAnonymous.ToString().ToLower();
+        return @Model.IsUserAnonymous ? "false" : "true";
     }
 
     Coveo.$(function() {
         Coveo.$("#@Model.Id")
         .on(Coveo.QueryEvents.buildingQuery, function(e, args) {
-            if (!userHasAccessToSecuredContent()) {
+            if (userHasAccessToSecuredContent()) {
                 args.queryBuilder.advancedExpression.add("NOT @@ItemIsACopy");
             }
         })

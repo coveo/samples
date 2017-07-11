@@ -30,29 +30,37 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Coveo.AbstractLayer">
-      <HintPath>..\..\..\inetpub\wwwroot\LaunchSitecore\Website\bin\Coveo.AbstractLayer.dll</HintPath>
+    <Reference Include="Coveo.AbstractLayer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Coveo.AbstractLayer.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.Framework">
-      <HintPath>..\..\Habitat.Coveo\lib\Coveo\Coveo.Framework.dll</HintPath>
+    <Reference Include="Coveo.Framework, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Coveo.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.SearchProvider">
-      <HintPath>..\..\Habitat.Coveo\lib\Coveo\Coveo.SearchProvider.dll</HintPath>
+    <Reference Include="Coveo.SearchProvider, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Coveo.SearchProvider.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.SearchProvider.Rest">
-      <HintPath>..\..\..\inetpub\wwwroot\LaunchSitecore\Website\bin\Coveo.SearchProvider.Rest.dll</HintPath>
+    <Reference Include="Coveo.SearchProvider.Rest, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Coveo.SearchProvider.Rest.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.SearchProviderBase">
-      <HintPath>..\..\..\inetpub\wwwroot\LaunchSitecore\Website\bin\Coveo.SearchProviderBase.dll</HintPath>
+    <Reference Include="Coveo.SearchProviderBase, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Coveo.SearchProviderBase.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.ContentSearch">
-      <HintPath>..\..\..\inetpub\wwwroot\LaunchSitecore\Website\bin\Sitecore.ContentSearch.dll</HintPath>
+    <Reference Include="Sitecore.ContentSearch, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Sitecore.ContentSearch.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.ContentSearch.Linq">
-      <HintPath>..\..\..\inetpub\wwwroot\LaunchSitecore\Website\bin\Sitecore.ContentSearch.Linq.dll</HintPath>
+    <Reference Include="Sitecore.ContentSearch.Linq, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Sitecore.ContentSearch.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Kernel">
-      <HintPath>..\..\..\inetpub\wwwroot\LaunchSitecore\Website\bin\Sitecore.Kernel.dll</HintPath>
+    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

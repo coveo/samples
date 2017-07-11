@@ -10,7 +10,6 @@ These instructions will help you compile and install the processor (step 2 and 3
     * Coveo.SearchProviderBase.Rest.dll
     * Coveo.SearchProviderBase.dll
     * Sitecore.ContentSearch.dll
-    * Sitecore.ContentSearch.Linq.dll
     * Sitecore.Kernel.dll
 
 2. Compile the CreateSecuredItemPreviewProcessor

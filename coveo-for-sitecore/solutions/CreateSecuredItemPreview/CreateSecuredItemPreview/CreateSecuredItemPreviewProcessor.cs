@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Coveo.AbstractLayer.RepositoryItem;
 using Coveo.AbstractLayer.Security;
@@ -30,25 +29,41 @@ namespace CreateSecuredItemPreview
     private const string CHECKBOX_FIELD_CHECKED_VALUE = "1";
     private const string STRING_SEPARATOR_FOR_FIELDS_TO_REMOVE = ";";
     private const string EMPTY_SITECORE_SECURITY_DOMAIN = "";
-    private const string NEW_METADATA_ITEM_IS_A_COPY = "ItemIsACopy";
-    private const string NEW_METADATA_FIELDS_TO_REMOVE = "FieldsToRemove";
-    private const string SITECORE_FIELDS_TO_HIDE_ID_LIST = "fieldstoremoveids";
+    private const string ITEM_IS_A_COPY_METADATA_KEY = "item is a copy";
+    private const string REMOVED_FIELDS_NAME_METADATA_KEY = "removed fields name";
+    private const string SITECORE_FIELDS_TO_HIDE_ID_LIST = "fields to remove ids";
     private const char CHAR_SEPARATOR_FOR_FIELDS_TO_REMOVE = ';';
 
     /// <summary>
-    /// ID of the field where the Field Remover is activated
+    /// Get or sets the ID of the field that contains the checkbox to determine if fields needs to be removed from the item.
     /// </summary>
-    public string ActivateFieldRemoverID { get; set; }
+    public string RemoveFieldsID { get; set; }
 
     /// <summary>
-    /// ID of the field where the Preview Remover is activated
+    /// Get or sets the ID of the field that contains the checkbox to determine if the preview needs to be removed from the item.
     /// </summary>
-    public string ActivatePreviewRemoverID { get; set; }
+    public string RemovePreviewID { get; set; }
 
     /// <summary>
-    /// Suffix that will be added at the end of the duplicated item URI
+    /// Get or sets the Suffix that will be added at the end of the duplicated item URI
     /// </summary>
     public string LimitedItemSuffix { get; set; }
+
+    private bool IsFieldRemoverActive(SitecoreIndexableItem sitecoreIndexableItem) {
+      ID activateFieldRemoverID = new ID(RemoveFieldsID);
+      return sitecoreIndexableItem.GetFieldById(activateFieldRemoverID).Value.ToString() == CHECKBOX_FIELD_CHECKED_VALUE;
+    }
+
+    private bool IsPreviewRemoverActive(SitecoreIndexableItem sitecoreIndexableItem) {
+      ID activatePreviewRemoverID = new ID(RemovePreviewID);
+      return sitecoreIndexableItem.GetFieldById(activatePreviewRemoverID).Value.ToString() == CHECKBOX_FIELD_CHECKED_VALUE;
+    }
+
+    private readonly ICoveoIndexFetcher m_CoveoIndexFetcher;
+
+    public CreateSecuredItemPreviewProcessor() {
+      m_CoveoIndexFetcher = new CoveoIndexFetcher();
+    }
 
     /// <inheritDoc />
     public void Process(CoveoPostItemProcessingPipelineArgs p_Args)
@@ -56,52 +71,43 @@ namespace CreateSecuredItemPreview
       s_Logger.TraceEntering();
 
       Precondition.NotNull(p_Args, () => () => p_Args);
+
       CoveoIndexableItem coveoIndexableItem = p_Args.CoveoItem;
       SitecoreIndexableItem sitecoreIndexableItem = p_Args.Item as SitecoreIndexableItem;
-      ID activateFieldRemoverID = new ID(ActivateFieldRemoverID);
-      ID activatePreviewRemoverID = new ID(ActivatePreviewRemoverID);
-      ISearchIndex searchIndex = new CoveoIndexFetcher().GetCoveoSearchIndex(sitecoreIndexableItem);
+
+      ISearchIndex searchIndex = m_CoveoIndexFetcher.GetCoveoSearchIndex(sitecoreIndexableItem);
       IFieldNameTranslator translator = searchIndex.FieldNameTranslator as IFieldNameTranslator;
 
-      bool fieldRemoverActive = false;
-      bool previewRemoverActive = false;
+      bool isFieldRemoverActive = IsFieldRemoverActive(sitecoreIndexableItem);
+      bool isPreviewRemoverActive = IsPreviewRemoverActive(sitecoreIndexableItem);
 
       string newUniqueId = coveoIndexableItem.UniqueId + LimitedItemSuffix;
       string newUri = coveoIndexableItem.Uri + LimitedItemSuffix;
 
       byte[] hiddenButSearchableItemPreview = coveoIndexableItem.BinaryData;
 
-      if (sitecoreIndexableItem.GetFieldById(activateFieldRemoverID).Value.ToString() == CHECKBOX_FIELD_CHECKED_VALUE) {
-        fieldRemoverActive = true;
-      };
-
-      if (sitecoreIndexableItem.GetFieldById(activatePreviewRemoverID).Value.ToString() == CHECKBOX_FIELD_CHECKED_VALUE) {
-        previewRemoverActive = true;
-      };
-
       if (coveoIndexableItem != null &&
           sitecoreIndexableItem != null &&
-          (fieldRemoverActive || previewRemoverActive)) {
+          (isFieldRemoverActive || isPreviewRemoverActive)) {
 
         // Add information in metadata to spot the duplicate and to indicates which fields needs to be stripped
         Dictionary<string, object> newMetadata = new Dictionary<string, object>(coveoIndexableItem.Metadata);
-        List<string> fieldsToHideList = newMetadata[SITECORE_FIELDS_TO_HIDE_ID_LIST].
-            ToString()
-            .Split(CHAR_SEPARATOR_FOR_FIELDS_TO_REMOVE)
-            .Select(field => sitecoreIndexableItem.GetFieldById(new ID(field)))
-            .Select(field => translator.TranslateToCoveoFormat(field.Name.ToString()))
-            .ToList();
+        String[] SitecoreFieldsToHide = newMetadata[SITECORE_FIELDS_TO_HIDE_ID_LIST].ToString().Split(CHAR_SEPARATOR_FOR_FIELDS_TO_REMOVE);
+        List<string> fieldsToHideList = new List<string>();
 
-        newMetadata.Add(NEW_METADATA_FIELDS_TO_REMOVE, string.Join(STRING_SEPARATOR_FOR_FIELDS_TO_REMOVE, fieldsToHideList));
-        newMetadata.Add(NEW_METADATA_ITEM_IS_A_COPY, CHECKBOX_FIELD_CHECKED_VALUE);
+        foreach (string field in SitecoreFieldsToHide) {
+          fieldsToHideList.Add(translator.TranslateToCoveoFormat(sitecoreIndexableItem.GetFieldById(new ID (field)).Name));
+        };
 
-        CoveoIndexableItem strippedItem = new CoveoIndexableItem
-        {
+        newMetadata.Add(REMOVED_FIELDS_NAME_METADATA_KEY, string.Join(STRING_SEPARATOR_FOR_FIELDS_TO_REMOVE, fieldsToHideList));
+        newMetadata.Add(ITEM_IS_A_COPY_METADATA_KEY, CHECKBOX_FIELD_CHECKED_VALUE);
+
+        CoveoIndexableItem strippedItem = new CoveoIndexableItem {
           //Modify the ID, the metadata and the URI
           UniqueId = newUniqueId,
           Metadata = newMetadata,
           Uri = newUri,
-          //Add anonymous permission
+          //Add anonymous permissions
           Permissions = CreateAnonymousAccessRule(),
           //Copy the rest of the original item data
           BinaryData = coveoIndexableItem.BinaryData,
@@ -130,13 +136,13 @@ namespace CreateSecuredItemPreview
       account.RoleInfo = new IndexableAccount.AccountRoleInfo(true);
       AccessRulesHierarchy accessRuleHierarchy = new AccessRulesHierarchy();
       IEnumerable<IndexableReadAccessRule> accessRules = new[] {
-                new IndexableReadAccessRule() {
-                    Account = account,
-                    PermissionType = IndexablePermissionType.Access,
-                    PropagationType = IndexablePropagationType.Entity,
-                    SecurityPermission = IndexableSecurityPermission.AllowAccess
-                }
-            };
+        new IndexableReadAccessRule() {
+            Account = account,
+            PermissionType = IndexablePermissionType.Access,
+            PropagationType = IndexablePropagationType.Entity,
+            SecurityPermission = IndexableSecurityPermission.AllowAccess
+        }
+      };
 
       accessRuleHierarchy.AddChildRules(accessRules);
 
@@ -149,8 +155,7 @@ namespace CreateSecuredItemPreview
       Item item = Event.ExtractParameter<Item>(p_Args, 0);
 
       if (item != null) {
-        CoveoIndexFetcher indexFetcher = new CoveoIndexFetcher();
-        IEnumerable<IProviderIndex> providerIndexes = indexFetcher.GetCoveoSearchIndexesForDatabase(item.Database.Name);
+        IEnumerable<IProviderIndex> providerIndexes = m_CoveoIndexFetcher.GetCoveoSearchIndexesForDatabase(item.Database.Name);
 
         foreach (IProviderIndex providerIndex in providerIndexes) {
           ISearchIndex searchIndex = providerIndex as ISearchIndex;
