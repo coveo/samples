@@ -30,35 +30,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Coveo.AbstractLayer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Coveo.AbstractLayer">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Coveo.AbstractLayer.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.Framework, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Coveo.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Coveo.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.SearchProvider, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Coveo.SearchProvider">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Coveo.SearchProvider.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.SearchProvider.Rest, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Coveo.SearchProvider.Rest">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Coveo.SearchProvider.Rest.dll</HintPath>
     </Reference>
-    <Reference Include="Coveo.SearchProviderBase, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Coveo.SearchProviderBase">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Coveo.SearchProviderBase.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.ContentSearch, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Sitecore.ContentSearch">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Sitecore.ContentSearch.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.ContentSearch.Linq, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Sitecore.ContentSearch.Linq">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Sitecore.ContentSearch.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Sitecore.Kernel">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Sitecore.Kernel.dll</HintPath>
     </Reference>

@@ -35,17 +35,17 @@ namespace CreateSecuredItemPreview
     private const char CHAR_SEPARATOR_FOR_FIELDS_TO_REMOVE = ';';
 
     /// <summary>
-    /// Get or sets the ID of the field that contains the checkbox to determine if fields needs to be removed from the item.
+    /// Gets or sets the ID of the field that contains the checkbox to determine if fields needs to be removed from the item.
     /// </summary>
     public string RemoveFieldsID { get; set; }
 
     /// <summary>
-    /// Get or sets the ID of the field that contains the checkbox to determine if the preview needs to be removed from the item.
+    /// Gets or sets the ID of the field that contains the checkbox to determine if the preview needs to be removed from the item.
     /// </summary>
     public string RemovePreviewID { get; set; }
 
     /// <summary>
-    /// Get or sets the Suffix that will be added at the end of the duplicated item URI
+    /// Gets or sets the Suffix that will be added at the end of the duplicated item URI.
     /// </summary>
     public string LimitedItemSuffix { get; set; }
 
