@@ -1,9 +1,0 @@
-headers:
-  apiKey: "Bearer <access token>"
-  organisation: "<organisation name>"
-  sourceName: "<source name>"
-  url: "<node containing the url>"
-
-basicInformation:
-  array: "<array containing the documents>"
-  filePath: "<file path>"

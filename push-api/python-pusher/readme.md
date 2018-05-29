@@ -1,14 +1,3 @@
-```text
-                  _                   _ 
-                 | |                 (_)
-  _ __  _   _ ___| |__     __ _ _ __  _ 
- | '_ \| | | / __| '_ \   / _` | '_ \| |
- | |_) | |_| \__ \ | | | | (_| | |_) | |
- | .__/ \__,_|___/_| |_|  \__,_| .__/|_|
- | |                           | |      
- |_|                           |_|      
-                                      
-```
 # JSON Document Scraper for Coveo Cloud Push-API
 Scrape a local folder and push each document to Coveo Cloud
 
@@ -19,7 +8,7 @@ Scrape a local folder and push each document to Coveo Cloud
 ## Required File Format
 Each document must be a `.json`. The following `.json` template will result in a HTML file, fully searchable and previewable in Coveo Cloud:
 
-```json
+```sh
 {
     "DocumentId": "www.foo.com",
     "fieldMappedInCoveoCloud": "Foo Bar",
