@@ -1,6 +1,6 @@
 class SCRAPER_PARAM():
     FILE_TYPE = ".json"
-    ENCODING = "ISO-8859-1"
+    ENCODING = "UTF-8"
     UNIQUE_DOCUMENT_ID_NODE = "DocumentId"
 
 class PUSH_API_PARAM():
