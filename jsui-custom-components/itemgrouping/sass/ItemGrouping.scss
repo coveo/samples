@@ -1,0 +1,178 @@
+.coveo-card-layout.CoveoResult {
+min-width: 30%;
+max-width: 30%;
+border: none;
+box-shadow: 0 0 10px #e6e6e6;
+transition: 0.2s ease;
+border-radius: 4px; }
+
+.coveo-card-layout.CoveoResult:hover {
+box-shadow: 0 0 10px #c8c8c8; }
+
+.img-wrap img {
+width: 100%;
+vertical-align: 50%;
+position: absolute;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+margin: auto;
+max-height: 100%; }
+
+.img-wrap {
+height: 200px;
+position: relative; }
+
+.swatches {
+width: 20px;
+height: 20px;
+border-radius: 50%;
+box-shadow: 0 0 2px white;
+display: inline-block;
+transition: 0.2s ease;
+}
+
+.swatches:hover {
+    cursor: pointer;
+}
+
+.CoveoFacet, .CoveoFacetSlider {
+border: none; 
+}
+
+.coveo-result-cell.title{
+height: 80px;
+}
+
+#facetColor span.coveo-facet-value-caption:before{
+border-radius: 50%;
+box-shadow: 0 0 2px white;
+margin-right: 10px;
+margin-left: 2px;
+padding: 1px;
+color: white;
+content: "       "
+}
+
+#facetColor span.coveo-facet-value-caption[title="Black"]:before,
+.swatches.Black {
+background-color: black;
+box-shadow: 0 0 2px black;
+}
+
+#facetColor span.coveo-facet-value-caption[title="White"]:before,
+.swatches.White {
+background-color: white;
+box-shadow: 0 0 2px rgb(200,200,200);
+}
+
+#facetColor span.coveo-facet-value-caption[title="Stainless"]:before,
+.swatches.Stainless {
+background-color: silver;
+box-shadow: 0 0 2px silver;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Platinum"]:before,
+.swatches.Platinum {
+background-color:  grey;
+box-shadow: 0 0 2px grey;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Red"]:before,
+.swatches.Red {
+background-color:  rgb(200,0,0);
+box-shadow: 0 0 2px rgb(200,0,0);
+}
+#facetColor span.coveo-facet-value-caption[title="Silver"]:before,
+.swatches.Silver {
+background-color:  silver;
+box-shadow: 0 0 2px silver;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Blue"]:before,
+.swatches.Blue {
+background-color:  rgb(0,100,200);
+box-shadow: 0 0 2px rgb(0,100,200);
+}
+
+#facetColor span.coveo-facet-value-caption[title="Green"]:before,
+.swatches.Green {
+background-color:  Green;
+box-shadow: 0 0 2px Green;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Pink"]:before,
+.swatches.Pink {
+background-color:  Pink;
+box-shadow: 0 0 2px Pink;
+}
+#facetColor span.coveo-facet-value-caption[title="Purple"]:before,
+.swatches.Purple {
+background-color:  Purple;
+box-shadow: 0 0 2px Purple;
+}
+#facetColor span.coveo-facet-value-caption[title="Teal"]:before,
+.swatches.Teal {
+background-color:  Teal;
+box-shadow: 0 0 2px Teal;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Orange"]:before,
+.swatches.Orange {
+background-color:  Orange;
+box-shadow: 0 0 2px Orange;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Yellow"]:before,
+.swatches.Yellow {
+background-color:  #FFDF00;
+box-shadow: 0 0 2px #FFDF00;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Pair"]:before,
+.swatches.Pair {
+background-color:  #007F66;
+box-shadow: 0 0 2px #007F66;
+}
+
+#facetColor span.coveo-facet-value-caption[title="DarkGrey"]:before,
+.swatches.DarkGrey {
+background-color:  darkgray;
+box-shadow: 0 0 2px darkgray;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Gray"]:before,
+.swatches.Gray {
+background-color:  grey;
+box-shadow: 0 0 2px grey;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Beige"]:before,
+.swatches.Beige {
+background-color:  beige;
+box-shadow: 0 0 2px beige;
+}
+#facetColor span.coveo-facet-value-caption[title="Tan"]:before,
+.swatches.Tan {
+background-color:  tan;
+box-shadow: 0 0 2px tan;
+}
+
+
+#facetColor span.coveo-facet-value-caption[title="Navy Floral"]:before,
+.swatches.Navy.Floral {
+background-color:  navy;
+box-shadow: 0 0 2px navy;
+}
+
+#facetColor span.coveo-facet-value-caption[title="Brown"]:before,
+.swatches.Brown {
+background-color:  brown;
+box-shadow: 0 0 2px brown;
+}
+#facetColor span.coveo-facet-value-caption[title="Brown"]:before,
+.swatches.Brown {
+background-color:  #800020;
+box-shadow: 0 0 2px #800020;
+}
