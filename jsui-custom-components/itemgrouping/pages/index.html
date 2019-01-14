@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, height=device-height" >
+    <title>Vbernard - Relevance</title>
+    <link rel="stylesheet" href="./css/CoveoFullSearch.css"/>
+    <link rel="stylesheet" href="./css/coveoextension.css"/>
+    <script src="js/CoveoJsSearch.Lazy.js"></script>
+    <script src="js/coveo.extension.js"></script>
+    <script src="js/templates/templates.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        Coveo.SearchEndpoint.configureCloudEndpoint('#####', '#####', 'https://platform.cloud.coveo.com/rest/search');
+        Coveo.init(document.body);
+      })
+    </script>
+  </head>
+  <body id="search" class='CoveoSearchInterface' data-enable-history="true">
+    <div class='CoveoAnalytics'></div>
+    <div class="CoveoItemGrouping" data-field-to-group="@groupid"></div>
+    <div class='coveo-search-section'>
+      <div class="CoveoSearchbox" data-enable-omnibox="true" data-enable-query-suggest-addon='true' data-enable-query-syntax='true'>
+          <span class="CoveoFieldSuggestions" data-field='@concepts'></span>
+          <span class="CoveoFieldSuggestions" data-field='@color'></span>
+          <span class="CoveoFieldSuggestions" data-field='@brand'></span>
+      </div>
+    </div>
+    <div class="coveo-main-section">
+      <div class="coveo-facet-column">
+        <div class="CoveoFacet" data-field="@color" data-title="Available Colors" id="facetColor"></div>
+        <div class="CoveoFacet" data-field="@Brand" data-title="Brand"></div>
+        <div class="CoveoFacetSlider" data-display-as-percent-enabled="false" data-display-as-value-unit-sign="$" data-end="200"  data-field="@price" data-graph-steps="10" data-id="Price" data-range-slider="true" data-start="0" data-steps="10" data-title="Price" data-date-field="false"></div>
+      </div>
+      <div class="coveo-results-column">
+        <div class="CoveoShareQuery"></div>
+        <div class="CoveoExportToExcel"></div>
+        <div class="CoveoPreferencesPanel">
+          <div class="CoveoResultsPreferences"></div>
+          <div class="CoveoResultsFiltersPreferences"></div>
+        </div>
+        <div class="CoveoBreadcrumb"></div>
+        <div class="coveo-results-header">
+          <div class="coveo-summary-section">
+            <span class="CoveoQuerySummary"></span>
+          </div>
+          <div class="coveo-result-layout-section">            
+            <span class="CoveoResultLayout"></span>
+          </div>
+          <div class="coveo-sort-section">
+            <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance"></span>
+            <span class="CoveoSort" data-sort-criteria="date descending,date ascending" data-caption="Date"></span>
+          </div>
+        </div>
+        <div class="CoveoHiddenQuery"></div>
+        <div class="CoveoDidYouMean"></div>
+        <div class="CoveoErrorReport"></div>
+        <div class="CoveoResultList" data-layout="card" data-wait-animation="fade" data-auto-select-fields-to-include="false">
+            <script class="result-template" type="text/x-underscore-template">
+              <div class="coveo-result-frame">
+
+                  <div class="coveo-result-row">
+                    <div class="coveo-result-cell"><h2>{{- raw.brand }}</h2></div>
+                  </div>
+                  
+                  <div class="coveo-result-row">
+                      <div class="coveo-result-cell title">{{- highlightStreamText(raw.model) }}</div>
+                  </div>
+
+                  {{ 
+                    var childCount = childResults.length
+                  }}
+
+                  <div class="coveo-result-row">
+                    <div class="coveo-result-cell"><div class="img-wrap"><img style="max-width: 300px;" src="{{- raw.imagesurl}}" /></div></div>
+                  </div>
+
+                  <div class="coveo-result-row">
+                    <div class="coveo-result-cell"><h3>${{- raw.price }} </h3></div>
+                  </div>
+
+                  {{ if (childCount > 0) { 
+
+                  }}<b>Also available in:</b><div style="padding-top: 5px"> {{
+
+                    for (i=0; i < childCount; i++){ 
+                      var color = childResults[i].raw.color;
+
+                    }} <span class="swatches {{- color }}" title="{{- color }}"></span> {{
+                    
+                    }
+                    }}</div>{{
+                  }
+                }}
+                </div>
+            </script>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
