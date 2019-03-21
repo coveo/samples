@@ -1,6 +1,6 @@
 module.exports = function getFields(settings, currentPage, unusedFields) {
     const request = require('./callApi');
-    getOptions = {
+    const getOptions = {
         url: settings.platform + '/rest/organizations/' + settings.orgId + '/sources/page/fields?includeMappings=true&page=' + currentPage + '&perPage=100',
         headers: {
             Authorization: 'Bearer ' + settings.apiKey
@@ -16,12 +16,13 @@ module.exports = function getFields(settings, currentPage, unusedFields) {
             return;
         }
 
-        JSON.parse(body).items.forEach(field => {
+        const fields = JSON.parse(body).items;
+        fields.forEach(field => {
             if (field.sources.length < 1) {
-                unusedFields = unusedFields +  field.name +',';
+                unusedFields.push(field.name);
             }
         });
-        if (JSON.parse(body).items.length == 100) {
+        if (fields.length == 100) {
             currentPage++;
             getFields(settings, currentPage, unusedFields);
         } else {
@@ -29,25 +30,29 @@ module.exports = function getFields(settings, currentPage, unusedFields) {
                 console.log("No unused fields detected.");
                 return;
             }
-            unusedFields = unusedFields.slice(0, -1);
-            let deleteOptions = {
-                url: settings.platform + '/rest/organizations/' + settings.orgId + '/sources/fields/batch/delete?fields=' + unusedFields,
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + settings.apiKey
+
+            const maxFieldsPerRequest = 50;
+            for (i = 0; i < unusedFields.length / maxFieldsPerRequest; i++) {
+                const currentSlice = unusedFields.slice(i * maxFieldsPerRequest, ((i + 1) * maxFieldsPerRequest)).join(',');
+                const deleteOptions = {
+                    url: settings.platform + '/rest/organizations/' + settings.orgId + '/sources/fields/batch/delete?fields=' + currentSlice,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + settings.apiKey
+                    }
                 }
+                request(deleteOptions, function(deleteErr, deleteResponse, deleteBody) {
+                    if (deleteErr) {
+                        console.log('Error deleting fields: ' + deleteErr);
+                        return;
+                    }
+                    if (deleteResponse != 204) {
+                        console.log('[Field Deletion] ' + deleteResponse.statusCode + ' - ' + deleteBody);
+                        return;
+                    }
+                    console.log('All unused fields deleted.');
+                })
             }
-            request(deleteOptions, function(deleteErr, deleteResponse, deleteBody) {
-                if (deleteErr) {
-                    console.log('Error deleting fields: ' + deleteErr);
-                    return;
-                }
-                if (deleteResponse != 204) {
-                    console.log(deleteResponse.statusCode + ' - ' + deleteBody);
-                    return;
-                }
-                console.log('All unused fields deleted.');
-            })
         }
     })
 }
