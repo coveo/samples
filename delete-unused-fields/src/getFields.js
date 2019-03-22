@@ -2,26 +2,27 @@ module.exports = function getFields(settings, currentPage, unusedFields) {
     const request = require('./callApi');
     const getOptions = {
         url: settings.platform + '/rest/organizations/' + settings.orgId + '/sources/page/fields?includeMappings=true&page=' + currentPage + '&perPage=100',
+        method: 'GET',
         headers: {
             Authorization: 'Bearer ' + settings.apiKey
         }
     }
     request(getOptions, function (err, response, body) {
         if (err) {
-            console.log('Err: ' + err);
+            console.log('Err: ', err);
             return;
         }
         if (response.statusCode != 200) {
-            console.log(response.statusCode + ' - ' + body);
+            console.log(response.statusCode + '-' , body);
             return;
         }
 
         const fields = JSON.parse(body).items;
-        fields.forEach(field => {
-            if (field.sources.length < 1) {
-                unusedFields.push(field.name);
-            }
-        });
+
+        let currentFields = fields.filter(field => field.sources.length < 1);
+        currentFields = currentFields.map(field => field.name);
+        unusedFields.push(...currentFields);
+
         if (fields.length == 100) {
             currentPage++;
             getFields(settings, currentPage, unusedFields);
@@ -43,14 +44,14 @@ module.exports = function getFields(settings, currentPage, unusedFields) {
                 }
                 request(deleteOptions, function(deleteErr, deleteResponse, deleteBody) {
                     if (deleteErr) {
-                        console.log('Error deleting fields: ' + deleteErr);
+                        console.log('Error deleting fields: ', deleteErr);
                         return;
                     }
-                    if (deleteResponse != 204) {
-                        console.log('[Field Deletion] ' + deleteResponse.statusCode + ' - ' + deleteBody);
+                    if (deleteResponse.statusCode != 204) {
+                        console.log('[Field Deletion] ' + deleteResponse.statusCode + ' - ', deleteBody);
                         return;
                     }
-                    console.log('All unused fields deleted.');
+                    console.log(`Deleted all ${unusedFields.length} unused field(s).`);
                 })
             }
         }

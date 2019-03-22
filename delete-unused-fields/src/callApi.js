@@ -1,21 +1,16 @@
 module.exports = function callApi(settings, cb) {
+    const { URL } = require('url');
     const h = require('https');
-    const port = 443;
 
-    let path = '';
-    let shortUrlWithPath = settings.url.substring(8);
-    let shortUrl = shortUrlWithPath.substring(0, shortUrlWithPath.indexOf('/'));
+   let url = new URL (settings.url);
 
-    if (shortUrlWithPath.indexOf('/') > -1) {
-        path = shortUrlWithPath.substring(shortUrlWithPath.indexOf('/'));
-    }
-    const options = {
-        host: shortUrl,
-        port: port,
-        path: path,
-        method: settings.method,
-        headers: settings.headers
-    }
+   const options = {
+       host: url.host,
+       port: 443,
+       path: url.pathname + url.search,
+       method: settings.method,
+       headers: settings.headers
+   }
 
     const req = h.request(options, (res) => {
         let d = '';
