@@ -1,33 +1,19 @@
-const config = require("./webpack.config");
-const serve = require('webpack-serve');
-const PagesFileWatcher = require("./webpack-serve.filewatcher.plugin");
-const jslibRouter = require("./webpack-serve.jslib.middleware");
+const config = require("./webpack.config")[0];
+const {
+  WebpackPluginServe: Serve
+} = require('webpack-plugin-serve');
 
-const serveConfig = {
-    content: ["bin"],
-    port: 3000,
-    hot: {
-        host: 'localhost',
-        port: 3090
-    },
-    dev: {
-        // Defines the path in which to provide the "hot" files.
-        publicPath: "/js"
-    },
-    on: {
-        listening(server) {
-          new PagesFileWatcher(server, 3090);
-        }
-      },
-      add: (app, middleware, options) => {
-        // Required when using "add".
-        middleware.webpack();
-        middleware.content();
-
-        // Registers the routes to provide a mocked API server.
-        app.use(jslibRouter.routes());
-    }
+const options = {
+  client: {
+    address: 'localhost:3000',
+  },
+  static: [process.cwd(), require('path').resolve('./bin')],
+  port: 3000,
 };
 
-module.exports = config[0];
-module.exports.serve = serveConfig;
+config.plugins = [
+  new Serve(options)
+];
+config.watch = true;
+
+module.exports = config;

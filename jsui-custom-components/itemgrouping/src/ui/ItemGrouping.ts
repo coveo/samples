@@ -18,7 +18,7 @@ export class ItemGrouping extends Component {
   static options: IItemGroupingOptions = {
 
     fieldToGroup: ComponentOptions.buildStringOption({
-      defaultValue: '@groupid', 
+      defaultValue: '@groupid',
     }),
 
     fieldForRanking: ComponentOptions.buildStringOption({
@@ -32,7 +32,7 @@ export class ItemGrouping extends Component {
     this.bind.onRootElement(QueryEvents.buildingQuery, (args: IBuildingQueryEventArgs) => this.handleBuildingQuery(args));
     this.bind.onRootElement(QueryEvents.doneBuildingQuery, (args: IBuildingQueryEventArgs) => this.handleDoneBuildingQuery(args));
   }
-  
+
   // Define the field to be used for grouping
   private handleBuildingQuery(args: IBuildingQueryEventArgs) {
     args.queryBuilder.filterField = this.options.fieldToGroup;
@@ -40,7 +40,7 @@ export class ItemGrouping extends Component {
   }
 
 
-  // If there is a keyword, a nested query is used to find the item 
+  // If there is a keyword, a nested query is used to find the item
   // and retreive all the related items to create the group. A ranking expression is
   // used to change the order of the items within a group, and the query is removed from
   // the expression since it's injected in the nested query already.
